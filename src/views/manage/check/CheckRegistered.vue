@@ -9,7 +9,7 @@
       <el-table
         :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.direction.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%;"
-        max-height="2500"
+        max-height="480"
         key="1"
         v-show="hide"
         @row-click='rowclick'

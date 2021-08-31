@@ -1,24 +1,16 @@
 <template>
-    <!-- <UserNav></UserNav> -->
-    <!-- <MyButton padding="10px 20px" color="blue">点击</MyButton> -->
 
-  <!-- <div class="middle">
-    <Manage></Manage>
-  </div> -->
-  <!-- <UserNav></UserNav> -->
   <div class="middle">
     <Manage></Manage>
   </div>
 </template>
 
 <script>
-import UserNav from "./components/UserNav.vue";
 import Manage from "./views/manage/manage.vue";
 
 export default {
   name: "App",
   components: {
-    UserNav,
     Manage,
   },
 };

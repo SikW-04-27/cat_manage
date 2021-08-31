@@ -1,7 +1,6 @@
 //该文件专门用于创建整个应用的路由器
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Introduction from '../views/introduction/Introduction.vue'
 import Register from '../views/register/Register.vue'
 
 //管理端组件
@@ -22,29 +21,10 @@ import StudentLogin from '../views/login/children/StudentLogin.vue'
 import ManagerLogin from '../views/login/children/ManagerLogin.vue'
 import StudentRegister from '../views/register/children/StudentRegister.vue'
 import ManageRegister from '../views/register/children/ManageRegister.vue'
-import News from '../views/news/News.vue'
-import Appointment from '../views/appointment/Appointment.vue'
-import Progress from '../views/progress/progress.vue'
-import Form from '../views/signup/Form.vue'
-import SignIn from '../views/signIn/signIn.vue'
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-
-        // 工作室介绍默认
-        {
-            path: '',
-            name: '',
-            component: Introduction,
-        },
-
-        // 工作室介绍
-        {
-            path: '/introduction',
-            name: '',
-            component: Introduction,
-        },
 
         // 登录界面
         {
@@ -102,36 +82,6 @@ const router = createRouter({
                 },
             ]
         },
-
-        // 填写报名表
-        {
-            path: '/Form',
-            name: '',
-            component: Form,
-        },
-
-        // 预约面试时间
-        {
-            path: '/appointment',
-            name: '',
-            component: Appointment,
-        },
-
-        // 查看整体进度
-        {
-            path: '/progress',
-            name: '',
-            component: Progress,
-        },
-
-        // 用户进行签到
-        {
-            path: '/signIn',
-            name: '',
-            component: SignIn,
-        },
-
-
 
         //查看已报名学生
         {
@@ -208,12 +158,6 @@ const router = createRouter({
             path: '/manageRegister',
             component: ManageRegister
         },
-
-        {
-            name: '',
-            path: '/news',
-            component: News
-        }
 
     ]
 })
