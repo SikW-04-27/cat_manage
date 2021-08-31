@@ -1,5 +1,4 @@
 <template>
-
   <div class="middle">
     <Manage></Manage>
   </div>
