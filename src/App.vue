@@ -1,16 +1,19 @@
 <template>
   <div class="middle">
-    <Manage></Manage>
+    <!-- <Manage></Manage> -->
+    <Login></Login>
   </div>
 </template>
 
 <script>
 import Manage from "./views/manage/manage.vue";
+import Login from "./views/login/Login.vue"
 
 export default {
   name: "App",
   components: {
     Manage,
+    Login,
   },
 };
 </script>
