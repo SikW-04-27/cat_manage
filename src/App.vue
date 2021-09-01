@@ -1,7 +1,7 @@
 <template>
   <div class="middle">
     <!-- <Manage></Manage> -->
-    <Login></Login>
+  <router-view></router-view>
   </div>
 </template>
 

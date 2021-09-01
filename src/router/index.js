@@ -17,10 +17,6 @@ import ModifyQueue from '../views/manage/operation/ModifyQueue.vue'
 
 
 import Login from '../views/login/Login.vue'
-import StudentLogin from '../views/login/children/StudentLogin.vue'
-import ManagerLogin from '../views/login/children/ManagerLogin.vue'
-import StudentRegister from '../views/register/children/StudentRegister.vue'
-import ManageRegister from '../views/register/children/ManageRegister.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -31,26 +27,6 @@ const router = createRouter({
             path: '/login',
             name: '',
             component: Login,
-            children: [
-
-                {
-                    path: '',
-                    name: '',
-                    component: StudentLogin
-                },
-
-                {
-                    path: 'studentLogin',
-                    name: '',
-                    component: StudentLogin
-                },
-
-                {
-                    path: 'managerLogin',
-                    name: '',
-                    component: ManagerLogin
-                }
-            ]
 
         },
 
@@ -59,28 +35,6 @@ const router = createRouter({
             path: '/register',
             name: '',
             component: Register,
-            children: [
-
-                // 学生注册
-                {
-                    name: '',
-                    path: '',
-                    component: StudentRegister,
-                },
-
-                {
-                    name: '',
-                    path: 'studentRegister',
-                    component: StudentRegister,
-                },
-
-                // 管理员注册
-                {
-                    name: '',
-                    path: 'manageRegister',
-                    component: ManageRegister,
-                },
-            ]
         },
 
         //查看已报名学生
@@ -151,12 +105,6 @@ const router = createRouter({
             path: '/modifyqueue',
             name: 'modifyqueue',
             component: ModifyQueue,
-        },
-
-        {
-            name: '',
-            path: '/manageRegister',
-            component: ManageRegister
         },
 
     ]
