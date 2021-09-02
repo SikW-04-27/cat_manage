@@ -2,7 +2,7 @@
 // 该函数用来验证学生或者用户注册时验证用户名,邮箱，密码等的格式是否正确
 
 
-export default function (name, mail, password, managerKey, identity) {
+export default function (name, mail, password) {
 
     // 返回的提示信息
     let checkTips = '';
@@ -14,8 +14,7 @@ export default function (name, mail, password, managerKey, identity) {
     const checkMail = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
     // 验证密码格式
     const checkPassword = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,18}$/;
-    // 验证管理员秘钥
-    const checkKey = /4396777/;
+   
 
     if (!checkName.test(name)) {
         checkTips = '用户名格式错误';
@@ -35,12 +34,6 @@ export default function (name, mail, password, managerKey, identity) {
         checkFlag = 0;
     }
 
-    if (!identity) {
-        if (!checkKey.test(managerKey)) {
-            checkTips += '管理员秘钥错误';
-            checkFlag = 0;
-        }
-    }
 
     return [checkFlag, checkTips];
 }
