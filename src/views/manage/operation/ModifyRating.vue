@@ -7,7 +7,7 @@
     分数：<el-input type="number" v-model="score" placeholder="请输入分数" max="100" min="0"></el-input><br><br>
     评价：<el-input type="textarea" v-model="desc" resize="none" :rows="5" ></el-input><br><br><br><br><br><br><br>
 
-  <el-button type="primary" @click="comfirm">确认修改</el-button>
+  <ManageButton @click="comfirm">确认修改</ManageButton>
   </div>
 
 </template>
@@ -16,7 +16,9 @@
 import { ref,onMounted } from "vue";
 import { useRouter } from "vue-router";
 import {addAppraise} from '../../../request/api'
+import ManageButton from '../../../components/ManageButton.vue'
 export default {
+  components:{ManageButton},
   setup(props) {
     let user_process = ref('')
     let score = ref('');
@@ -40,9 +42,9 @@ export default {
       }).then(res => {
         console.log(res);
       })
-      // router.push({
-      //   path:"/checkdetialpoint"
-      // })
+      router.push({
+        path:"/manage/checkdetialpoint"
+      })
     }
 
     return {

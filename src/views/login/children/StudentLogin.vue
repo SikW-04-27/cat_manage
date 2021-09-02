@@ -9,6 +9,7 @@
 
 <script>
 import {ref} from 'vue'
+import {useRouter} from 'vue-router'
 
 export default {
 
@@ -17,9 +18,18 @@ export default {
         let studentMail = ref('');
         let studentPassword = ref('');
 
+        let router = useRouter()
+
+        let register = function(){
+          router.push({
+            path: '/manage/checkcenter'
+          })
+        }
+
         return {
             studentMail,
-            studentPassword
+            studentPassword,
+            register
         }
     }
 

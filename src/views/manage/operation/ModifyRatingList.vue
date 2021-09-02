@@ -66,7 +66,7 @@ export default {
         window.sessionStorage.setItem("user_status",JSON.stringify(column));
         router.push({
           name:"checkdetialpoint",
-          path:'/checkdetialpoint',
+          path:'/manage/checkdetialpoint',
         });
       }
     };
