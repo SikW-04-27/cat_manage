@@ -1,4 +1,6 @@
 <template>
+<div class="point_block">
+    <el-page-header @back="goBack" content="查看分数"> </el-page-header>
     <div class="personinfo">
         <p>姓名：{{user_name}}</p>
         <p>学号：{{user_id}}</p>
@@ -9,7 +11,7 @@
     </div>
 
     <div class="avatar">
-    <img src="https://img2.baidu.com/it/u=1305759230,3688102309&fm=26&fmt=auto&gp=0.jpg" alt=""/>
+      <img :src="avatarimg" alt="用户头像"/>
     </div>
     <div class="modifyinfo">
     <el-table
@@ -32,29 +34,43 @@
         </el-table-column>
     </el-table>
     </div>
+</div>
+
 
 </template>
 
 <script>
 import { ref,onMounted, reactive } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import ManageButton from "../../../components/ManageButton.vue";
+import {getavatar} from '../../../request/api'
 export default {
   components:{ManageButton},
   setup(props) {
     let user_name = ref('');
     let user_id = ref(0); 
     let user_process = ref(''); 
-    let tableData = reactive([])
-    let route = useRoute()
+    let tableData = reactive([]);
+    let avatarimg = ref('https://img1.baidu.com/it/u=982817805,3596061521&fm=26&fmt=auto&gp=0.jpg')
+    const router = useRouter()
+
+    let goBack = function(){
+      router.back()
+    }
+
+    let get_avatar = function(){
+        getavatar().then((res) => {
+            avatarimg.value = res.data;
+        });
+    }
+
     onMounted(()=>{
       let user_point = JSON.parse( window.sessionStorage.getItem('user_point'));
       let user_status = JSON.parse( window.sessionStorage.getItem('user_status'));
       user_name.value = user_point.name;
       user_id.value = user_point.studentId;
       user_process.value = user_status.label;
-
-      
+      get_avatar()
 
       switch (user_status.label){
         case '笔试':
@@ -73,19 +89,36 @@ export default {
           tableData.push(...user_point.userAppraiseSecondReview);
           break
       }
+      
     })
 
     return {
       user_name,
       user_id,
       user_process,
-      tableData
+      tableData,
+      avatarimg,
+      goBack
     }
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+  .point_block{
+    // 页眉
+    .el-page-header{
+      height: 30px;
+      margin-top: 10px;
+        .el-page-header__title,.el-icon-back{
+          font-size: 20px;
+      }
+      .el-page-header__content{
+        color: rgb(173, 173, 173);
+      }
+    }
+
+    // 用户信息
     .personinfo{
         width: 300px;
         height: 200px;
@@ -97,8 +130,11 @@ export default {
           margin-bottom: 10px;
         }
     }
+
+    // 头像
     .avatar {
         width: 150px;
+        height: 150px;
         margin: 20px auto;
         margin-bottom: 50px;
         img {
@@ -107,6 +143,9 @@ export default {
             border-radius: 50%;
         }
     }
+  }
+
+    
 
     .modifyinfo{
 

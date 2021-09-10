@@ -3,13 +3,10 @@
         <!-- 查看全部预约时间 -->
         <el-table
             class="el-table-scolled"
+            @row-click='clickrow'
             :data="tableData"
             height="400"
             style="width: 45%">
-            <el-table-column
-            prop="id"
-            label="时间ID">
-            </el-table-column>
             <el-table-column
             prop="beginTime"
             label="开始时间"
@@ -41,16 +38,14 @@
                 placeholder="选择日期时间">
             </el-date-picker><br><br>
             <span class="demonstration">预约人数：</span>
-            <el-input-number v-model="count" :min="1" label="描述文字" ></el-input-number><br><br>
+            <el-input-number v-model="count" :min="1" label="描述文字" style="margin-right:30px"></el-input-number>
             <ManageButton @click="addappointment">添加预约</ManageButton>
 
             <!-- 分割线 -->
             <el-divider ></el-divider>
-
-            <!-- 删除预约时间 -->
-            <el-input-number v-model="deleteId" :min="1" label="描述文字"></el-input-number>
-            <ManageButton @click="deleteappointment" style="margin-left:30px">删除该时间段</ManageButton><br><br>
-            <ManageButton @click="deleteAllAppointment">删除全部时间段</ManageButton><br><br>
+            当前预约状态：{{appointment_status}} <br><br>
+            <ManageButton @click="appointment_start" style="margin-right:30px">开启预约</ManageButton>
+            <ManageButton @click="appointment_close">关闭预约</ManageButton><br>
         </div>
 
 
@@ -59,11 +54,12 @@
 </template>
 
 <script>
-import { reactive,ref } from 'vue'
+import { onMounted, reactive,ref } from 'vue'
+import {useRouter} from 'vue-router'
 import ManageButton from '../../../components/ManageButton.vue'
 import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
 import '../../../../node_modules/dayjs/dayjs.min.js'
-import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAppointmentInfo} from '../../../request/api'
+import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAppointmentInfo,appointmentstart,appointmentcheck,appointmentclose} from '../../../request/api'
     export default {
         components:{ManageButton},
         setup(props) {
@@ -73,12 +69,10 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
             let endTime = ref('')
             let count = ref(0)
             let deleteId = ref(0)
+            let appointment_status = ref('...')
+            const router = useRouter();
 
-            // 查看全部预约时间
-            listAppointment({}).then(res => {
-                console.log(res);
-                tableData.push( ...res.data)
-            })
+            
 
             //添加预约时间
             let addappointment = function(){
@@ -87,11 +81,10 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
                     cancelButtonText: '取消',
                     type: 'warning',
                 }).then(()=>{
-                    console.log(beginTime);
                     let beginTime_value = dayjs(beginTime.value).format('YYYY-MM-DD HH:mm:ss')
                     let endTime_value = dayjs(endTime.value).format('YYYY-MM-DD HH:mm:ss')
                     let count_value = count.value
-                    let loadingInstance = ElLoading.service({fullscreen:false,target:'.el-table-scolled',background:'rgb(41, 45, 63, 0.8)'});
+                    let loadingInstance = ElLoading.service({fullscreen: false,target: ".el-table__body-wrapper",background: "rgba(55, 55, 55, 0.699)",});
                     saveNewAppointmentInfo({
                         "beginTime":beginTime_value,
                         "endTime":endTime_value,
@@ -106,10 +99,7 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
                                 loadingInstance.close()
                             }).catch(err => {
                                 loadingInstance.close()
-                                ElMessage({
-                                    type: 'info',
-                                    message: '删除失败',
-                                });
+                                ElMessage.error(err.data.message)
                             })
                         }else if(res.code === 40300){
                             loadingInstance.close()
@@ -119,72 +109,74 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
                             });
                         }
                         
-                    })
-                })
-                
-            }
-
-            // 删除预约时间段
-            let deleteappointment = function(){
-                ElMessageBox.confirm('是否删除该时间段?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                }).then(() => {
-                    let loadingInstance = ElLoading.service({fullscreen:false,target:'.el-table-scolled',background:'rgb(41, 45, 63, 0.8)'});
-                    let deleteId_value = deleteId.value;
-                    deleteAppointmentInfo({"id":deleteId_value}).then(res => {
-                        listAppointment({}).then(res => {
-                            tableData.splice(0,tableData.length);
-                            tableData.push( ...res.data);
-                            loadingInstance.close()
-                        }).catch(()=>{
-
-                        })
-                        
-                    }).catch(()=>{
-                        console.log("kkkkkkkkkkkkkkkkk");
+                    }).catch(err => {
                         loadingInstance.close()
-                        ElMessage({
-                            type: 'info',
-                            message: '加载失败',
-                        });
+                        ElMessage.error(err.data.message)
                     })
                 })
                 
             }
 
-            // 删除全部时间段
-            let deleteAllAppointment =function(){
-                ElMessageBox.confirm('此操作将永久删除所有时间段, 是否继续?', '提示', {
+            // 开启预约
+            let appointment_start = function(){
+                ElMessageBox.confirm('是否开启预约', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
                 }).then(()=>{
-                    let loadingInstance = ElLoading.service({fullscreen:false,target:'.el-table-scolled',background:'rgb(41, 45, 63, 0.8)'});
-                    deleteAllAppointmentInfo().then(res => {
-                        console.log(res);
-                        ElMessage({
-                            type: 'success',
-                            message: '删除成功!',
-                        });
-                        tableData.splice(0,tableData.length);
-                        loadingInstance.close()
-                    }).catch(err => {
-                        ElMessage({
-                            type: 'info',
-                            message: '删除失败',
-                        });
-                        loadingInstance.close()
+                    appointment_status.value = '...'
+                    appointmentstart().then(res=>{
+                        if(res.code === 1512){
+                            ElMessage.warning(res.message)
+                        }else{
+                            ElMessage.success(res.message)
+                            appointment_status.value = '预约开启'
+                        }
                     })
-                }).catch(()=>{
-                    ElMessage({
-                        type: 'info',
-                        message: '已取消删除',
-                    });
                 })
-
+                
             }
+
+            // 关闭预约
+            let appointment_close = function(){
+                ElMessageBox.confirm('是否关闭预约', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }).then(()=>{
+                    appointment_status.value = '...'
+                    appointmentclose().then(res => {
+                        if(res.code === 1513){
+                            ElMessage.warning(res.message)
+                        }else{
+                           ElMessage.success(res.message)
+                            appointment_status.value = '预约未开放' 
+                        }
+                    })
+                })
+                
+            }
+
+            // 点击行
+            let clickrow = function(row){
+                window.sessionStorage.setItem('appointment_people',row.id)
+                router.push({
+                    path:'/manage/checkappointment'
+                })
+            }
+
+            onMounted(()=>{
+                let loadingInstance = ElLoading.service({fullscreen: false,target: ".el-table__body-wrapper",background: "rgba(55, 55, 55, 0.699)",});
+                // 查看全部预约时间
+                listAppointment({}).then(res => {
+                    loadingInstance.close()
+                    tableData.push( ...res.data)
+                })
+                // 检查当前预约状态
+                appointmentcheck().then(res=>{
+                    appointment_status.value = res.message
+                })
+            })
             
 
             return {
@@ -194,9 +186,11 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
                 beginTime,
                 endTime,
                 count,
+                appointment_status,
                 addappointment,
-                deleteappointment,
-                deleteAllAppointment
+                appointment_start,
+                appointment_close,
+                clickrow,
             }
         }
     }

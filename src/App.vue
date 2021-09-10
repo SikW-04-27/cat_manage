@@ -45,7 +45,7 @@ export default {
 body {
   // background-color: #292d3f;
   // background: url('./assets/img/bg.jpg') no-repeat 100% 100%;
-  background-image: url('./assets/img/bg6.png');
+  background-image: url('./assets/img/bg7.png');
   // background-image: url('./assets/img/bg1.jpg');
   // background-image: url('./assets/img/bg2.png');
   // background-size: contain;

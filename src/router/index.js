@@ -8,6 +8,7 @@ import Manage from '../views/manage/manage.vue'
 import CheckRegistered from '../views/manage/check/CheckRegistered.vue'
 import CheckPersonal from '../views/manage/check/CheckPersonal.vue'
 import CheckCenter from '../views/manage/check/CheckCenter.vue'
+import CheckAppointment from '../views/manage/check/CheckAppointment.vue'
 import ModifyCenter from '../views/manage/operation/ModifyCenter.vue'
 import ModifyRating from '../views/manage/operation/ModifyRating.vue'
 import ModifyRatingList from '../views/manage/operation/ModifyRatingList.vue'
@@ -15,6 +16,7 @@ import CheckDetialPoint from '../views/manage/check/CheckDetialPoint.vue'
 import ModifyProcess from '../views/manage/operation/ModifyProcess.vue'
 import ModifyStatus from '../views/manage/operation/ModifyStatus.vue'
 import ModifyQueue from '../views/manage/operation/ModifyQueue.vue'
+import ModifyMessage from '../views/manage/operation/ModifyMessage.vue'
 
 
 import Login from '../views/login/Login.vue'
@@ -121,6 +123,18 @@ const router = createRouter({
                     name: 'modifyrating',
                     component: ModifyRating,
                 },
+
+                // 推送信息
+                {
+                    path: 'modifymessage',
+                    component: ModifyMessage,
+                },
+
+                // 查看某个时间段已预约的人
+                {
+                    path: 'checkappointment',
+                    component: CheckAppointment
+                }
             ]
         },
     ]

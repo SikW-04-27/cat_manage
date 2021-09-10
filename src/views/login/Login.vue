@@ -1,88 +1,119 @@
 <template>
-  <div>登录</div>
+  <div class="loginbox">
+    <MyFront class="login_title">登录</MyFront>
 
-  <div id="student-login" class="">
-    <input type="text" v-model="mail" placeholder="账户" />
-    <input type="text" v-model="password" placeholder="密码" />
-    <div>{{ tips }}</div>
-    <button @click="login">登录</button>
-  </div>
-  <div class="skip-register">
-        <router-link to='/register'>账号注册</router-link>
+    <div class="manage_login">
+      <input type="text" v-model="mail" placeholder="账户" />
+      <input type="text" v-model="password" placeholder="密码" />
+      <div>{{ tips }}</div>
+      <div class="login_button">
+        <ManageButton @click="login">登录</ManageButton>
+        <ManageButton @click="register">账号注册</ManageButton>
+      </div>
+      
     </div>
+  </div>
+  
 </template>
 
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import {useRouter} from 'vue-router'
+import ManageButton from '../../components/ManageButton.vue'
+import MyFront from '../../components/MyFront.vue'
+import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
 
-import AccountOperate from "../../components/AccountOperate.vue";
-import {userLogin} from '../../request/api'
+// import AccountOperate from "../../components/AccountOperate.vue";
+import {userLogin,complete,attain} from '../../request/api'
 
 export default {
   name: "Login",
   components: {
-    AccountOperate,
+    ManageButton,
+    MyFront
   },
   setup() {
     let mail = ref("");
     let password = ref("");
     let tips = ref("");
 
- const router = useRouter();
+    const router = useRouter();
 
 
     function login() {
       if (!mail.value.trim() || !password.value.trim()) {
         tips.value = "邮箱或密码不能为空";
       } else {
+        let loading = ElLoading.service({fullscreen:true,background:'rgba(49, 49, 49, 0.856)'})
         userLogin({
           keyWord: mail.value,
           password: password.value,
-        })
-          .then((result) => {
+        }).then((result) => {
             console.log(result);
             const code = result.code;
             if (code === 2100) {
               localStorage.setItem("token", result.data.token);
-
-              // router.push({
-              //   path: '/introduction'
-              // })
+              loading.close();
+              router.push({
+                path: '/manage/checkcenter'
+              })
+              location.reload()
+              
             } else {
-              tips.value = result.message;
+              loading.close();
+              ElMessage.error(result.message);
             } 
-          })
-          .catch((e) => {
-            console.log(e);
+            
+          }).catch((e) => {
+            loading.close(e);
+            ElMessage.error('请求失败，请重新登录');
           });
       }
     }
+
+    function register(){
+      router.push({
+        path: '/register'
+      })
+    }
+
+    onMounted(() => {
+      let token = window.localStorage.getItem('token');
+      if(token){
+        router.push({
+          path: '/manage/checkcenter'
+        })
+      }
+    })
 
     return {
       mail,
       password,
       tips,
       login,
+      register,
     };
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 /* @import "tailwindcss/tailwind.css"; */
 /* @import '../../assets/scss/normalize.css'; */
-.skip-register {
-  position: absolute;
-  top: 16%;
-  left: 30%;
-  color: #fff;
-  font-size: 14px;
-}
+.loginbox{
+  text-align: center;
+  width: 500px;
+  margin: 100px auto;
 
-#student-login {
-  //   margin: 65px auto;
+  .login_title{
+    text-align: center;
+    margin: 0 auto;
+    font-size: 20px;
+  }
+
+  .manage_login {
+  margin: 0 auto;
   width: 400px;
   height: 220px;
   color: #fff;
@@ -94,41 +125,22 @@ export default {
     border-bottom: 2px solid #ffffff;
     background-color: rgba(0, 0, 0, 0) !important;
     margin-top: 28px;
-    width: 210px;
+    width: 300px;
     height: 30px;
-    color: red;
+    color: rgb(182, 179, 179);
     font-size: 13px;
   }
 
-  button {
-    margin-top: 15px;
-    width: 120px;
-    height: 36px;
+  .login_button{
+    margin: 20px auto;
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
   }
 }
-
-$color: #0bc7f4;
-
-.myButton {
-  color: $color;
-  // padding: 10px 30px;
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
 }
 
-.myButton:hover {
-  background: $color;
-  box-shadow: 0 0 50px $color;
-}
 
-.myButton::before {
-  border-top: 2px solid $color;
-  border-left: 2px solid $color;
-}
 
-.myButton::after {
-  border-bottom: 2px solid $color;
-  border-right: 2px solid $color;
-}
+
 </style>

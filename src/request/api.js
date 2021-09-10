@@ -25,7 +25,9 @@ export const deleteAppointmentInfo = p => post(`${url1}appointment/deleteInfo`, 
 
 //通过ID获得某个用户的进度信息
 export const getUserStatus = p => post(`${url1}status/getUserStatus`, p);
-export const deleteAllAppointmentInfo = p => post(`${url1}appointment/delteAllInfo`, p);
+
+// 删除全部预约时间段
+export const deleteAllAppointmentInfo = p => post(`${url1}appointment/deleteAllInfo`, p);
 
 //获取当前总体招新阶段
 export const getCurrentStatus = p => post(`${url1}status/getCurrentStatus`, p);
@@ -68,6 +70,7 @@ export const queue = p => post(`${url1}queue/signIn`, p);
 
 //获取当前签到是否开启
 export const queueStatus = () => post(`${url1}queue/checkStatus`);
+
 //管理员开启签到状态
 export const startQueue = p => post(`${url1}queue/startQueue`,p);
 
@@ -78,7 +81,70 @@ export const closeQueue = p => post(`${url1}queue/closeQueue`,p);
 export const checkStatus = p => post(`${url1}queue/checkStatus`,p);
 
 // 用户登录
-export const userLogin = p => post(`${url1}user/Login`, p);
+export const userLogin = p => post(`${url2}user/Login`, p);
+
+//批量淘汰
+export const batcheliminate = p => post(`${url2}enroll/eliminate`,p);
+
+//获得签到参加面试的用户信息
+export const listWaitingUser = p => post(`${url1}queue/listWaitingUser`,p);
+
+// 管理员叫号
+export const getUser = p =>post(`${url1}queue/getUser`, p);
+
+//获取某个学生详细分数信息
+export const getUserDetailInfo = p =>post(`${url1}status/getUserDetailInfo`, p);
+
+//确认用户参加了面试
+export const participate = p => post(`${url1}queue/participate`, p);
+
+//确认用户未参加面试
+export const notParticipate = p => post(`${url1}queue/notParticipate`, p);
+
+//上传头像
+export const avatar = p => post(`${url2}upload/avatar`, p);
+
+// 获取头像的路径
+export const getavatar = p => get(`${url2}avatar`, p);
+
+// 修改管理员信息
+export const complete = p => post(`${url2}console/complete`, p);
+
+//开放预约
+export const appointmentstart = p => post(`${url1}appointment/start`, p);
+
+//关闭预约
+export const appointmentclose = p => post(`${url1}appointment/close`, p);
+
+//查看当前预约
+export const appointmentcheck = p => post(`${url1}appointment/check`, p);
+
+// 淘汰所有未预约，未参加笔试面试的学生
+export const eliminateUser = p => post(`${url1}status/eliminateUser`, p);
+
+//推送消息给全部用户
+export const pushToAll = p => post(`${url1}message/pushToAll`, p);
+
+// 推送消息给通过或者淘汰的用户
+export const message_push = p => post(`${url1}message/push`, p);
+
+// 批量通过
+export const pass = p => post(`${url2}enroll/pass`, p);
+
+// 获得某个预约时间段预约的用户
+export const appointment_listUser = p => post(`${url1}appointment/listUser`, p);
+
+// 退出登录
+export const logout = p => get(`${url2}user/logout`, p);
+
+// 获取管理员的全部信息
+export const attain = p => get(`${url2}console/attain`, p);
+
+
+
+
+
+
 
 
 // export const login111 = p => post11('/user/Login', p);

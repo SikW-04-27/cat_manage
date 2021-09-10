@@ -1,12 +1,16 @@
 <template>
-  <div id="student-register">
+  <div class="student_register">
     <div>注册</div>
     <input type="text" v-model="name" placeholder="用户名" />
     <input type="text" v-model="mail" placeholder="邮箱" />
     <input type="password" v-model="password" placeholder="密码" />
     <input type="text" v-model="managerKey" placeholder="管理员秘钥" />
     <div class="student-register-tips">{{ tips }}</div>
-    <button @click="register" class="myButton">注册</button>
+    <div class="register_button">
+      <ManageButton @click="login">返回登录</ManageButton>
+      <ManageButton @click="register">注册</ManageButton>
+    </div>
+    
   </div>
 </template>
 
@@ -14,13 +18,15 @@
 <script>
 import { ref, onUpdated, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-
-
+import ManageButton from "../../components/ManageButton.vue"
 import { userRegister } from "../../request/api";
 import checkAccountFormate from "../../utils/checkAccountFormat.js";
+import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
 
 export default {
-  name: "StudentRegister",
+  components:{
+    ManageButton,
+  },
   setup(props, context) {
     let name = ref("");
     let mail = ref("");
@@ -31,6 +37,12 @@ export default {
     let flag = ref(true);
 
     const router = useRouter();
+
+    function login(){
+      router.push({
+        path: '/login'
+      })
+    }
 
     function register() {
       if (
@@ -54,28 +66,31 @@ export default {
         tips.value = checkInfo[1];
       } else {
         tips.value = "";
+        let loading = ElLoading.service({fullscreen:true,background:'rgba(49, 49, 49, 0.856)'})
         userRegister({
           userName: name.value,
           email: mail.value,
           password: password.value,
           identity: 0,
           verificationCode: managerKey.value,
-        })
-          .then((result) => {
+        }).then((result) => {
             console.log(result);
             if (result.code === 3100) {
+              loading.close();
               router.push({
                 path: "/login",
               });
             } else {
-              tips.value = result.message;
+              loading.close();
+              ElMessage.error(result.message);
             }
-          })
-          .catch((error) => {
-            console.log(error);
+          }).catch((error) => {
+            loading.close();
+            ElMessage.error(error);
           });
       }
     }
+
     return {
       name,
       mail,
@@ -83,15 +98,16 @@ export default {
       managerKey,
       tips,
       flag,
+      login,
       register,
     };
   },
 };
 </script>
 
-<style lang="scss">
-#student-register {
-  position: relative;
+<style lang="scss" scoped>
+.student_register {
+  margin: 150px auto;
   width: 400px;
   height: 330px;
   text-align: center;
@@ -99,10 +115,11 @@ export default {
 
   input {
     // display: block;
+    padding: 10px;
     margin-top: 28px;
     width: 210px;
     height: 30px;
-    color: red;
+    color: rgb(95, 94, 94);
     font-size: 13px;
   }
 
@@ -118,5 +135,13 @@ export default {
     height: 30px;
     line-height: 30px;
   }
+
+  .register_button{
+    margin: 0 auto;
+    width: 210px;
+    display: flex;
+    justify-content: space-between;
+  }
 }
+
 </style>

@@ -6,7 +6,7 @@
 export default {};
 </script>
 
-<style>
+<style lang='scss' scoped>
 
 .myFront {
   color: white;

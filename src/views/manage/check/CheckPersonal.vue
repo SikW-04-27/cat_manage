@@ -1,5 +1,6 @@
 <template>
   <div class="personal">
+      <!-- 个人详细信息 -->
       <div class="introduce">
         <span>姓名: {{user_name}}</span><br><br>
         <span>学院：{{user_major}}</span><br><br>
@@ -11,7 +12,7 @@
         <div class="person_introduce">{{user_selfIntroduction}}</div>
       </div>
       <div class="avatar" >
-          <img src="https://img2.baidu.com/it/u=2421505363,3507499484&fm=26&fmt=auto&gp=0.jpg " alt="">
+          <img :src="avatar_photo" alt="">
       </div>
       <div style="width:1px;height:500px;background-color:#fff; margin-left:30px"></div>
 
@@ -25,7 +26,7 @@
 
 <script>
 import { ref, onMounted, reactive } from 'vue'
-import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
+import {ElLoading, ElMessage  } from 'element-plus'
 import {enrolllist} from '../../../request/api'
 export default {
     setup(){
@@ -38,6 +39,7 @@ export default {
         let user_phoneNumber = ref('')
         let user_selfIntroduction = ref('')
         let items = reactive([])
+        let avatar_photo = ref('');
 
         // 更新页面数据
         let update = function(){
@@ -50,6 +52,11 @@ export default {
             user_studentId.value = user_register.studentId;
             user_phoneNumber.value = user_register.phoneNumber;
             user_selfIntroduction.value = user_register.selfIntroduction;
+            if(user_register.photo === '/img/'){
+                avatar_photo.value = 'https://img2.baidu.com/it/u=1494430848,632163233&fm=26&fmt=auto&gp=0.jpg'
+            }else{
+                avatar_photo.value = user_register.photo
+            }
         }
 
         // 点击右侧列表查看详情
@@ -60,7 +67,6 @@ export default {
 
         onMounted(()=>{
             update();
-
             // 加载右侧快捷列表
             let loadingInstance = ElLoading.service({fullscreen:false,target:'.el-scrollbar',background:'transparent',text:'拼命加载中'});
             enrolllist().then(res => {
@@ -85,6 +91,7 @@ export default {
             user_phoneNumber,
             user_selfIntroduction,
             items,
+            avatar_photo,
             updateitem
         }
     }    
@@ -94,7 +101,6 @@ export default {
 <style lang='scss' scoped>
     .personal{
         display: flex;
-        // justify-content: space-between;
         width: 1180px;
         padding: 20px;
         color: #fff;
@@ -113,7 +119,7 @@ export default {
             width: 550px;
             height: 250px;
             line-height: 30px;
-            overflow:auto
+            // white-space: wrap;
         }
         .avatar{
             margin-right: 50px;

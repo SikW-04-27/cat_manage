@@ -23,6 +23,9 @@
     <el-menu-item index="2-3">
       <router-link to="/manage/modifyqueue">管理叫号</router-link>
     </el-menu-item>
+    <el-menu-item index="2-4">
+      <router-link to="/manage/modifymessage">消息发布</router-link>
+    </el-menu-item>
   </el-submenu>
 
     <el-menu-item index="4">
@@ -79,15 +82,13 @@
     }
     .el-popper{
         .el-menu--horizontal{
-          background-color: rgb(14, 70, 97);
+          background-color: #000;
           a{
             height: 36px;
             line-height: 36px;
             padding-left: 0;
           }
         }
-        
-            
     }
 
 </style>
