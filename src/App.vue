@@ -1,13 +1,17 @@
 <template>
   <div class="middle">
     <!-- <Manage></Manage> -->
-  <router-view></router-view>
+    <!-- <Login></Login> -->
+    <!-- <router-link to='/manage'>2222</router-link> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import Manage from "./views/manage/manage.vue";
 import Login from "./views/login/Login.vue"
+import { useRouter } from 'vue-router'
+import {onMounted} from 'vue'
 
 export default {
   name: "App",
@@ -15,6 +19,18 @@ export default {
     Manage,
     Login,
   },
+  setup(){
+    const router = useRouter();
+    onMounted(() => {
+      let logining = window.sessionStorage.getItem('token');
+      if(!logining){
+        router.push({
+          path:'/login'
+        })
+      }
+      
+    })
+  }
 };
 </script>
 

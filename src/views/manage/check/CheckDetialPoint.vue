@@ -3,8 +3,8 @@
         <p>姓名：{{user_name}}</p>
         <p>学号：{{user_id}}</p>
         <p>阶段：{{user_process}}</p>
-        <router-link to="/modifyrating">
-            <el-button type="primary">修改分数</el-button>
+        <router-link to="/manage/modifyrating">
+            <ManageButton>修改分数</ManageButton>
         </router-link>
     </div>
 
@@ -38,7 +38,9 @@
 <script>
 import { ref,onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
+import ManageButton from "../../../components/ManageButton.vue";
 export default {
+  components:{ManageButton},
   setup(props) {
     let user_name = ref('');
     let user_id = ref(0); 

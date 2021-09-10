@@ -26,8 +26,8 @@
   </el-form-item><br>
 
   <el-form-item>
-      <router-link to="/checkcenter">
-        <el-button type="primary" @click="onSubmit">保存修改</el-button>
+      <router-link to="/manage/checkcenter">
+        <ManageButton @click="onSubmit">保存修改</ManageButton>
       </router-link>
     
   </el-form-item>
@@ -36,24 +36,26 @@
 
 <script>
   import {reactive} from 'vue'
+  import ManageButton from '../../../components/ManageButton.vue'
   export default {
-      setup(props) {
-          let formInline = reactive({
-            name: '',
-            direction: '',
-            phone: 13131313131,
-            studentid: 31210004444,
-          })
+    components:{ManageButton},
+    setup(props) {
+        let formInline = reactive({
+          name: '',
+          direction: '',
+          phone: 13131313131,
+          studentid: 31210004444,
+        })
 
-          function onSubmit() {
-            console.log('submit!');
-          }
+        function onSubmit() {
+          console.log('submit!');
+        }
 
-          return {
-              formInline,
-              onSubmit,
-          }
-      }
+        return {
+            formInline,
+            onSubmit,
+        }
+    }
   }
 </script>
 

@@ -43,7 +43,7 @@ import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
         console.log(JSON.stringify(row));
         window.sessionStorage.setItem('user_register',JSON.stringify(row))
         router.push({
-          path:'/checkpersonal'
+          path:'/manage/checkpersonal'
         })
       }
 

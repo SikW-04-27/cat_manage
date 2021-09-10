@@ -7,8 +7,8 @@
       <p>方向：前端</p>
       <p>学号：3120004444</p>
       <p>手机号：13444444444</p>
-        <router-link to="/modifycenter">
-            <el-button type="primary">修改信息</el-button>
+        <router-link to="/manage/modifycenter">
+            <ManageButton>修改信息</ManageButton>
         </router-link>
   </div>
 
@@ -16,8 +16,11 @@
 </template>
 
 <script>
+import ManageButton from '../../../components/ManageButton.vue'
 export default {
-
+    components:{ManageButton},
+    setup(){
+    }
 }
 </script>
 
