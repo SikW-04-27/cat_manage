@@ -17,14 +17,12 @@
 import { ref } from "vue";
 import {useRouter} from 'vue-router'
 
-import AccountOperate from "../../components/AccountOperate.vue";
+// import AccountOperate from "../../components/AccountOperate.vue";
 import {userLogin} from '../../request/api'
 
 export default {
   name: "Login",
-  components: {
-    AccountOperate,
-  },
+ 
   setup() {
     let mail = ref("");
     let password = ref("");
