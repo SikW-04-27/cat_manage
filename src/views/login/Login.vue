@@ -25,6 +25,7 @@ import MyFront from '../../components/MyFront.vue'
 import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
 
 // import AccountOperate from "../../components/AccountOperate.vue";
+<<<<<<< HEAD
 import {userLogin,complete,attain} from '../../request/api'
 
 export default {
@@ -33,6 +34,13 @@ export default {
     ManageButton,
     MyFront
   },
+=======
+import {userLogin} from '../../request/api'
+
+export default {
+  name: "Login",
+ 
+>>>>>>> 4e87419455534fd2c8a3eb08fcbcb12005b8ee25
   setup() {
     let mail = ref("");
     let password = ref("");
