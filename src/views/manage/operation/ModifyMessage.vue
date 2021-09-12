@@ -12,7 +12,7 @@
 
 <script>
 import ManageButton from '../../../components/ManageButton.vue'
-import {pushToAll,message_push,pass,listAllUser} from '../../../request/api'
+import {pushToAll,message_push,pass,listAllUser,closeQueue} from '../../../request/api'
 import { ElLoading, ElMessageBox, ElMessage } from "element-plus";
 import {reactive, ref} from 'vue'
     export default {
@@ -34,13 +34,48 @@ import {reactive, ref} from 'vue'
                     pushToAll({
                         content: message.value
                     }).then(res => {
-                        loadingInstance.close()
-                        ElMessage.success('推送成功')
+                        if(res.code === 1905){
+                            loadingInstance.close()
+                            ElMessage.warning(res.message)
+                        }else{
+                            loadingInstance.close()
+                            message.value = ''
+                            ElMessage.success('推送成功')
+                        }
+                        
                     }).catch(err=>{
+                        loadingInstance.close()
                         ElMessage.error('推送失败')
                     })
                 })
                 
+            }
+
+            let message_pushfun = function(){
+                message_push({
+                    passContent: win_message.value,
+                    eliminateContent: lose_message.value,
+                }).then(res=>{
+                    if(res.code == 1800){
+                        
+                        closeQueue().then(res=>{
+                            win_message.value = ''
+                            lose_message.value = ''
+                            ElMessage.success('推送成功')
+                        })
+                       
+                    }else if(res.code == 1902){
+                        ElMessage.warning(res.message)
+                    }
+                    console.log(res);
+                }).catch(err=>{
+                    if(err.data.code ===1904){
+                        ElMessage.error(err.data.message)
+                    }else{
+                        ElMessage.error('推送失败')
+                    }
+                    
+                })
             }
 
             // 推送通过或者淘汰的信息给用户
@@ -60,19 +95,12 @@ import {reactive, ref} from 'vue'
                             pass({
                                 ids: pass_people,
                             }).then(res => {
-                                message_push({
-                                    passContent: win_message.value,
-                                    eliminateContent: lose_message.value,
-                                }).then(res=>{
-                                    loadingInstance.close()
-                                    if(res.code == 1800){
-                                        ElMessage.success(res.message)
-                                    }else if(res.code == 1902){
-                                        ElMessage.warning(res.message)
-                                    }
-                                    console.log(res);
-                                })
+                                loadingInstance.close()
+                                message_pushfun();
                             })
+                        }).catch(err=>{
+                            message_pushfun()
+                            loadingInstance.close()
                         })
                     })
                 }else{

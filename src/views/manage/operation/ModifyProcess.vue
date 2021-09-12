@@ -19,7 +19,8 @@
             </el-table-column>
             <el-table-column
             prop="count"
-            label="人数">
+            label="剩余可预约人数"
+            width="160">
             </el-table-column>
         </el-table>
 
@@ -59,7 +60,7 @@ import {useRouter} from 'vue-router'
 import ManageButton from '../../../components/ManageButton.vue'
 import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
 import '../../../../node_modules/dayjs/dayjs.min.js'
-import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAppointmentInfo,appointmentstart,appointmentcheck,appointmentclose} from '../../../request/api'
+import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAppointmentInfo,appointmentstart,appointmentcheck,appointmentclose,pushToAll} from '../../../request/api'
     export default {
         components:{ManageButton},
         setup(props) {
@@ -129,8 +130,12 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
                         if(res.code === 1512){
                             ElMessage.warning(res.message)
                         }else{
-                            ElMessage.success(res.message)
-                            appointment_status.value = '预约开启'
+                            pushToAll({
+                                content: '预约已经开放，你可以预约啦'
+                            }).then(res=>{
+                                appointment_status.value = '预约开启'
+                                ElMessage.success(res.message)
+                            })
                         }
                     })
                 })

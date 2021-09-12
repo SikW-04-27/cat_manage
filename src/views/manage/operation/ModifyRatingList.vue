@@ -178,13 +178,21 @@ export default {
       });
       listAllUser()
         .then((res) => {
-          if(deletenum){
-            tableData.splice(0,res.data.length+deletenum)
+          if(res.code === 1406){
+            hide.value = true;
+            loadingInstance.close();
+            tableData.splice(0,deletenum)
+            // tableData.push([])
+          }else{
+            if(deletenum){
+              tableData.splice(0,res.data.length+deletenum)
+            }
+            tableData.push(...res.data);
+            loadingInstance.close();
+            canceleliminate();
+            hide.value = true;
           }
-          tableData.push(...res.data);
-          loadingInstance.close();
-          canceleliminate();
-          hide.value = true;
+          
         })
         .catch((err) => {
           loadingInstance.close();

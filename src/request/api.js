@@ -30,10 +30,10 @@ export const getUserStatus = p => post(`${url1}status/getUserStatus`, p);
 export const deleteAllAppointmentInfo = p => post(`${url1}appointment/deleteAllInfo`, p);
 
 //获取当前总体招新阶段
-export const getCurrentStatus = p => post(`${url1}status/getCurrentStatus`, p);
+export const getCurrentStatus = p => post(`${url2}status/getCurrentStatus`, p);
 
 //切换下一阶段
-export const updateStatus = p => post(`${url1}status/updateStatus`, p);
+export const updateStatus = p => post(`${url2}status/updateStatus`, p);
 
 //调试接口：指定招新状态
 export const updateStatusOnTest = p => post(`${url1}status/updateStatusOnTest`, p);
@@ -51,10 +51,10 @@ export const listAllMajor = () => get(`${url2}major/list`);
 export const sendCkeckNumber = p => post(`${url1}user/Verification`, p);
 
 //回退上一阶段
-export const toPreviousStatus = p => post(`${url1}status/toPreviousStatus`, p);
+export const toPreviousStatus = p => post(`${url2}status/toPreviousStatus`, p);
 
 //查询所有用户分数
-export const listAllUser = p => post(`${url1}status/listAllUser`, p);
+export const listAllUser = p => post(`${url2}status/listAllUser`, p);
 
 //打分
 export const addAppraise = p => post(`${url1}admin/addAppraise`, p);
@@ -132,13 +132,19 @@ export const message_push = p => post(`${url1}message/push`, p);
 export const pass = p => post(`${url2}enroll/pass`, p);
 
 // 获得某个预约时间段预约的用户
-export const appointment_listUser = p => post(`${url1}appointment/listUser`, p);
+export const appointment_listUser = p => post(`${url2}appointment/listUser`, p);
 
 // 退出登录
 export const logout = p => get(`${url2}user/logout`, p);
 
 // 获取管理员的全部信息
 export const attain = p => get(`${url2}console/attain`, p);
+
+// 根据用户id获取用户的头像
+export const loadavatar = p => post(`${url2}load/avatar`, p);
+
+// 推送消息给某个用户
+export const pushToUser = p => post(`${url1}message/pushToUser`, p);
 
 
 

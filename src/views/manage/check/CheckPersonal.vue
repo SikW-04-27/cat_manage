@@ -27,7 +27,7 @@
 <script>
 import { ref, onMounted, reactive } from 'vue'
 import {ElLoading, ElMessage  } from 'element-plus'
-import {enrolllist} from '../../../request/api'
+import {enrolllist,loadavatar} from '../../../request/api'
 export default {
     setup(){
         let user_name = ref('')
@@ -55,8 +55,17 @@ export default {
             if(user_register.photo === '/img/'){
                 avatar_photo.value = 'https://img2.baidu.com/it/u=1494430848,632163233&fm=26&fmt=auto&gp=0.jpg'
             }else{
-                avatar_photo.value = user_register.photo
+                avatar_photo.value = `http://47.107.49.231${user_register.photo}`
             }
+            // loadavatar({
+            //     id: user_register.uuid
+            // }).then(res=>{
+            //     if(res.code === 4040){
+            //         avatar_photo.value = 'https://img2.baidu.com/it/u=1494430848,632163233&fm=26&fmt=auto&gp=0.jpg'
+            //     }else{
+            //         avatar_photo.value.data
+            //     }
+            // })
         }
 
         // 点击右侧列表查看详情
@@ -67,6 +76,9 @@ export default {
 
         onMounted(()=>{
             update();
+
+            
+
             // 加载右侧快捷列表
             let loadingInstance = ElLoading.service({fullscreen:false,target:'.el-scrollbar',background:'transparent',text:'拼命加载中'});
             enrolllist().then(res => {
@@ -75,11 +87,12 @@ export default {
                 items.push(...res.data);
                 loadingInstance.close()
             }).catch(err => {
-                    console.log(err);
-                    loadingInstance.close()
-                    ElMessage.error('加载错误，请刷新')
-                })
+                console.log(err);
+                loadingInstance.close()
+                ElMessage.error('加载错误，请刷新')
             })
+
+        })
 
         return {
             user_name,

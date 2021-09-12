@@ -14,7 +14,7 @@
 import { onMounted, ref } from 'vue'
 import ManageButton from '../../../components/ManageButton.vue'
 import { ElLoading, ElMessageBox, ElMessage } from 'element-plus';
-import {getCurrentStatus,updateStatus,updateStatusOnTest,toPreviousStatus,deleteAllAppointmentInfo} from '../../../request/api'
+import {getCurrentStatus,updateStatus,updateStatusOnTest,toPreviousStatus,deleteAllAppointmentInfo,closeQueue} from '../../../request/api'
     export default {
         components:{ManageButton},
         setup(props) {
@@ -87,8 +87,11 @@ import {getCurrentStatus,updateStatus,updateStatusOnTest,toPreviousStatus,delete
                             getStatus('right');
                             // 删除全部预约时间段
                             deleteAllAppointmentInfo().then(res=>{
-                                ElMessage.success('切换状态成功')
+                                closeQueue().then(res=>{
+                                    ElMessage.success('切换状态成功');
+                                })
                             })
+                            
                         }else if(res.code === 1403){
                             loadingInstance.close();
                             ElMessage.error(res.message)

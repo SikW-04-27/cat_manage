@@ -57,12 +57,7 @@ export default {
     const router = useRouter();
     let manage_info = JSON.parse(window.localStorage.getItem('manageinfo'))
     let avatarimg = ref("https://img1.baidu.com/it/u=982817805,3596061521&fm=26&fmt=auto&gp=0.jpg");
-    let formInline = reactive({
-      name: manage_info.name,
-      direction: manage_info.direction,
-      phone: manage_info.phoneNumber,
-      studentid: manage_info.studentId,
-    });
+    let formInline = reactive({});
 
     // 返回上一级
     let back = function(){
@@ -122,9 +117,15 @@ export default {
             },
           })
           .then((res) => {
-            loadingInstance.close();
-            console.log(res);
-            avatarimg.value = res.data.data;
+            if(res.data.code === 4009){
+              loadingInstance.close();
+              ElMessage.warning(res.data.message)
+            }else{
+              loadingInstance.close();
+              console.log(res);
+              avatarimg.value = res.data.data;
+            }
+            
           })
           .catch((err) => {
             console.log(err);
@@ -143,6 +144,18 @@ export default {
         loadingInstance.close();
         avatarimg.value = res.data;
       });
+      if(!manage_info){
+        formInline.name = null;
+        formInline.direction = null;
+        formInline.phone = null;
+        formInline.studentid = null;
+        console.log(formInline);
+      }else{
+        formInline.name = manage_info.name;
+        formInline.direction = manage_info.direction;
+        formInline.phone = manage_info.phoneNumber;
+        formInline.studentid = manage_info.studentId;
+      }
     });
 
     return {

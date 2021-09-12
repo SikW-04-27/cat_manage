@@ -1,10 +1,10 @@
 <template>
   <div class="loginbox">
-    <MyFront class="login_title">登录</MyFront>
+    <div class="login_title">登录</div>
 
     <div class="manage_login">
       <input type="text" v-model="mail" placeholder="账户" />
-      <input type="text" v-model="password" placeholder="密码" />
+      <input type="password" v-model="password" placeholder="密码" />
       <div>{{ tips }}</div>
       <div class="login_button">
         <ManageButton @click="login">登录</ManageButton>
@@ -21,15 +21,16 @@
 import { ref, onMounted } from "vue";
 import {useRouter} from 'vue-router'
 import ManageButton from '../../components/ManageButton.vue'
-import MyFront from '../../components/MyFront.vue'
 import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
 
 // import AccountOperate from "../../components/AccountOperate.vue";
-import {userLogin} from '../../request/api'
+import {userLogin,complete,attain} from '../../request/api'
 
 export default {
   name: "Login",
- 
+  components: {
+    ManageButton,
+  },
   setup() {
     let mail = ref("");
     let password = ref("");
