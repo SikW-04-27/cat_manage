@@ -55,10 +55,8 @@ export function get(url, params) {
         axios.get(url, {
             params:params
         }).then(res => {
-            console.log("请求成功");
             resolve(res.data);
         }).catch(err => {
-            console.log("请求失败");
             reject(err);
         })
     })
@@ -69,10 +67,8 @@ export function post(url, params) {
     return new Promise((resolve, reject) => {
         axios.post(url, params)
             .then(res => {
-                console.log("请求成功");
                 resolve(res.data);
             }).catch(err => {
-                console.log("请求失败");
                 reject(err);
             })
     })

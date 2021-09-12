@@ -39,10 +39,14 @@ import {
   getUser,
   participate,
   notParticipate,
+  pushToUser,
+  pushToAll,
+  appointmentclose,
+  batcheliminate
 } from "../../../request/api";
 import ManageButton from "../../../components/ManageButton.vue";
 import { ElLoading, ElMessageBox, ElMessage } from "element-plus";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref,  } from "vue";
 export default {
   components: { ManageButton },
   setup(props) {
@@ -62,11 +66,17 @@ export default {
         startQueue()
           .then((res) => {
             if (res.code === 1100) {
-              signin_status.value = "当前处于签到状态";
-              ElMessage.success({
-                message: `${res.message}`,
-                type: "success",
-              });
+              pushToAll({
+                content:'签到已经开放，可以签到啦'
+              }).then(res=>{
+                signin_status.value = "当前处于签到状态";
+                ElMessage.success({
+                  message: `${res.message}`,
+                  type: "success",
+                });
+              })
+              appointmentclose()
+              
             } else if (res.code === 1300) {
               ElMessage.warning({
                 message: `${res.message}`,
@@ -123,7 +133,12 @@ export default {
           if(res.code === 1310){
             ElMessage.error(res.message)
           }else{
-            ElMessage.success('确认参加成功，请通知下个人面试')
+            pushToUser({
+              content: `面试已经结束，请你耐心等候结果`,
+              id: interviewing.value,
+            }).then(res=>{
+              ElMessage.success('确认参加成功，请通知下个人面试')
+            })
           }
           
         });
@@ -144,7 +159,14 @@ export default {
           if(res.code === 1310){
             ElMessage.error(res.message)
           }else{
-            ElMessage.success('确认该用户没来')
+            let deleteselect = [interviewing.value]
+            console.log(deleteselect);
+            batcheliminate({
+              ids: deleteselect
+            }).then(res=>{
+              ElMessage.success('确认该用户没来')
+            })
+            
           }
         }).catch(err => {
 
@@ -159,6 +181,12 @@ export default {
           interviewing.value = res.data.id;
           usering.value = res.data.userName;
           console.log(res);
+          pushToUser({
+            content: `请${res.data.userName}前往面试`,
+            id: res.data.id
+          }).then(res=>{
+            ElMessage.success('通知成功')
+          })
         })
         .catch((err) => {
           console.log(err);
@@ -170,7 +198,7 @@ export default {
     let openSocket = function () {
       var socket;
       let token = window.localStorage.getItem("token");
-      var socketUrl = `http://112.74.33.254:2358/ws/${token}`;
+      var socketUrl = `http://112.74.33.254:2358/ws/queue/${token}`;
       socketUrl = socketUrl.replace("https", "ws").replace("http", "ws");
       if (socket != null) {
         socket.close();
@@ -189,17 +217,21 @@ export default {
         console.log(
           "websocket 断开: " + e.code + " " + e.reason + " " + e.wasClean
         );
-        console.log(e);
-        // openSocket();
+        openSocket();
       };
     };
 
     onMounted(() => {
       openSocket();
       listWaitingUser().then((res) => {
-        console.log(res);
-        tableData.push(...res.data);
-        console.log(tableData);
+        if(res.code === 1309){
+          console.log(tableData);
+        }else{
+          console.log(res);
+          tableData.push(...res.data);
+          console.log(tableData);
+        }
+       
       });
       checkStatus().then((res) => {
         signin_status.value = res.message;

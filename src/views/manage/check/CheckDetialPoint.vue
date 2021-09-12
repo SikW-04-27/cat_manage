@@ -58,19 +58,15 @@ export default {
       router.back()
     }
 
-    let get_avatar = function(){
-        getavatar().then((res) => {
-            avatarimg.value = res.data;
-        });
-    }
 
     onMounted(()=>{
       let user_point = JSON.parse( window.sessionStorage.getItem('user_point'));
       let user_status = JSON.parse( window.sessionStorage.getItem('user_status'));
+      console.log(user_point);
       user_name.value = user_point.name;
       user_id.value = user_point.studentId;
       user_process.value = user_status.label;
-      get_avatar()
+      avatarimg.value = `http://47.107.49.231${user_point.photo}`
 
       switch (user_status.label){
         case '笔试':
@@ -144,11 +140,5 @@ export default {
         }
     }
   }
-
-    
-
-    .modifyinfo{
-
-    }
 
 </style>

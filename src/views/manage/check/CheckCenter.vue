@@ -61,10 +61,13 @@ export default {
         loadingInstance_1.close()
           localStorage.setItem("manageinfo", JSON.stringify(res.data));
           let user_info = JSON.parse(window.localStorage.getItem("manageinfo"));
-          userName.value = user_info.name;
-          studentId.value = user_info.studentId;
-          direction.value = user_info.direction;
-          phoneNumber.value = user_info.phoneNumber;
+          if(user_info){
+            userName.value = user_info.name;
+            studentId.value = user_info.studentId;
+            direction.value = user_info.direction;
+            phoneNumber.value = user_info.phoneNumber;
+          }
+          
           let loadingInstance = ElLoading.service({fullscreen: false,target: ".avatar",background: "rgba(55, 55, 55, 0.699)",});
           getavatar().then((res) => {
               loadingInstance.close();
