@@ -2,7 +2,7 @@
   <div class="rating_block">
       <div class="avatar">
       <img
-        src="https://img2.baidu.com/it/u=1305759230,3688102309&fm=26&fmt=auto&gp=0.jpg"
+        :src="avatarimg"
         alt=""
       />
     </div>
@@ -48,6 +48,7 @@ export default {
     let user_process = ref("");
     let score = ref("");
     let desc = ref("");
+    let avatarimg = ref("")
     const router = useRouter();
     let manageinfo = JSON.parse(window.localStorage.getItem("manageinfo"));
     let user_point = JSON.parse(window.sessionStorage.getItem("user_point"));
@@ -55,6 +56,14 @@ export default {
 
     onMounted(() => {
       user_process.value = user_status.label;
+      avatarimg.value = `http://47.107.49.231${user_point.photo}`
+      for(let i of user_point.userAppraiseExam){
+        if(i.adminName === manageinfo.name){
+          score.value = i.score;
+          desc.value = i.comment;
+          return
+        }
+      }
     });
 
     // 添加分数评论
@@ -100,6 +109,7 @@ export default {
       user_process,
       score,
       desc,
+      avatarimg,
       comfirm,
       back,
     };

@@ -59,7 +59,8 @@ import { onMounted, reactive,ref } from 'vue'
 import {useRouter} from 'vue-router'
 import ManageButton from '../../../components/ManageButton.vue'
 import {ElLoading, ElMessageBox, ElMessage  } from 'element-plus'
-import '../../../../node_modules/dayjs/dayjs.min.js'
+// import '../../../../node_modules/dayjs/dayjs.min.js'
+// import dayjs from 'dayjs'
 import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAppointmentInfo,appointmentstart,appointmentcheck,appointmentclose,pushToAll} from '../../../request/api'
     export default {
         components:{ManageButton},
@@ -95,6 +96,9 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
                         if(res.code === 1200){
                             // 设置成功则重新加载列表
                             listAppointment({}).then(res => {
+                                beginTime.value = '';
+                                endTime.value = '';
+                                count.value = 1
                                 tableData.splice(0,tableData.length);
                                 tableData.push( ...res.data);
                                 loadingInstance.close()
@@ -102,10 +106,10 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
                                 loadingInstance.close()
                                 ElMessage.error(err.data.message)
                             })
-                        }else if(res.code === 40300){
+                        }else{
                             loadingInstance.close()
                             ElMessage({
-                                type: 'info',
+                                type: 'warning',
                                 message: res.message,
                             });
                         }
@@ -174,8 +178,14 @@ import {listAppointment,saveNewAppointmentInfo,deleteAppointmentInfo,deleteAllAp
                 let loadingInstance = ElLoading.service({fullscreen: false,target: ".el-table__body-wrapper",background: "rgba(55, 55, 55, 0.699)",});
                 // 查看全部预约时间
                 listAppointment({}).then(res => {
-                    loadingInstance.close()
-                    tableData.push( ...res.data)
+                    if(res.code === 1502){
+                        loadingInstance.close()
+                        ElMessage.warning(res.message)
+                    }else{
+                        loadingInstance.close()
+                        tableData.push( ...res.data)
+                    }
+                    
                 })
                 // 检查当前预约状态
                 appointmentcheck().then(res=>{

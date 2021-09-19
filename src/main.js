@@ -7,6 +7,9 @@ import '../node_modules/element-plus/lib/theme-chalk/index.css';
 
 import "animate.css"
 
+// 引入日期库
+import 'dayjs'
+
 import App from './App.vue'
 
 import router from './router/index'

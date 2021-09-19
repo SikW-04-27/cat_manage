@@ -30,7 +30,7 @@ export const getUserStatus = p => post(`${url1}status/getUserStatus`, p);
 export const deleteAllAppointmentInfo = p => post(`${url1}appointment/deleteAllInfo`, p);
 
 //获取当前总体招新阶段
-export const getCurrentStatus = p => post(`${url2}status/getCurrentStatus`, p);
+export const getCurrentStatus = p => post(`${url1}status/getCurrentStatus`, p);
 
 //切换下一阶段
 export const updateStatus = p => post(`${url2}status/updateStatus`, p);
@@ -54,7 +54,7 @@ export const sendCkeckNumber = p => post(`${url1}user/Verification`, p);
 export const toPreviousStatus = p => post(`${url2}status/toPreviousStatus`, p);
 
 //查询所有用户分数
-export const listAllUser = p => post(`${url2}status/listAllUser`, p);
+export const listAllUser = p => post(`${url1}status/listAllUser`, p);
 
 //打分
 export const addAppraise = p => post(`${url1}admin/addAppraise`, p);
@@ -63,7 +63,7 @@ export const addAppraise = p => post(`${url1}admin/addAppraise`, p);
 export const userRegister = p => post(`${url1}user/Regiest`, p);
 
 // 查询所有用户的报名信息
-export const enrolllist = p => get(`${url2}enroll/list`, p);
+export const enrolllist = p => get(`${url1}enroll/list`, p);
 
 //用户签到加入等待队列
 export const queue = p => post(`${url1}queue/signIn`, p);
@@ -93,7 +93,7 @@ export const listWaitingUser = p => post(`${url1}queue/listWaitingUser`,p);
 export const getUser = p =>post(`${url1}queue/getUser`, p);
 
 //获取某个学生详细分数信息
-export const getUserDetailInfo = p =>post(`${url1}status/getUserDetailInfo`, p);
+export const getUserDetailInfo = p =>post(`${url2}status/getUserDetailInfo`, p);
 
 //确认用户参加了面试
 export const participate = p => post(`${url1}queue/participate`, p);
