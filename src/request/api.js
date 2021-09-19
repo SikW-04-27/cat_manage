@@ -60,7 +60,7 @@ export const listAllUser = p => post(`${url1}status/listAllUser`, p);
 export const addAppraise = p => post(`${url1}admin/addAppraise`, p);
 
 // 学生或管理员注册
-export const userRegister = p => post(`${url1}user/Regiest`, p);
+export const userRegister = p => post(`${url2}user/Regiest`, p);
 
 // 查询所有用户的报名信息
 export const enrolllist = p => get(`${url1}enroll/list`, p);
